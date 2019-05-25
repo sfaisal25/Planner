@@ -1,9 +1,14 @@
+
+import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
+
 /*
 HEADER
 */
 
 public class PlannerFrame extends javax.swing.JFrame {
-
     public PlannerFrame() {
         initComponents();
     }
@@ -12,17 +17,61 @@ public class PlannerFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        winDow = new javax.swing.JTabbedPane();
+        dashBoard = new javax.swing.JPanel();
+        Calendar = new javax.swing.JPanel();
+        Notes = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout dashBoardLayout = new javax.swing.GroupLayout(dashBoard);
+        dashBoard.setLayout(dashBoardLayout);
+        dashBoardLayout.setHorizontalGroup(
+            dashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 395, Short.MAX_VALUE)
+        );
+        dashBoardLayout.setVerticalGroup(
+            dashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 347, Short.MAX_VALUE)
+        );
+
+        winDow.addTab("Dashboard", dashBoard);
+
+        javax.swing.GroupLayout CalendarLayout = new javax.swing.GroupLayout(Calendar);
+        Calendar.setLayout(CalendarLayout);
+        CalendarLayout.setHorizontalGroup(
+            CalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 395, Short.MAX_VALUE)
+        );
+        CalendarLayout.setVerticalGroup(
+            CalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 347, Short.MAX_VALUE)
+        );
+
+        winDow.addTab("Calendar", Calendar);
+
+        javax.swing.GroupLayout NotesLayout = new javax.swing.GroupLayout(Notes);
+        Notes.setLayout(NotesLayout);
+        NotesLayout.setHorizontalGroup(
+            NotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 395, Short.MAX_VALUE)
+        );
+        NotesLayout.setVerticalGroup(
+            NotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 347, Short.MAX_VALUE)
+        );
+
+        winDow.addTab("Notes", Notes);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(winDow, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(winDow, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -58,5 +107,9 @@ public class PlannerFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Calendar;
+    private javax.swing.JPanel Notes;
+    private javax.swing.JPanel dashBoard;
+    private javax.swing.JTabbedPane winDow;
     // End of variables declaration//GEN-END:variables
 }

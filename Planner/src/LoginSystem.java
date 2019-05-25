@@ -18,6 +18,7 @@ import java.util.regex.*;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 public class LoginSystem extends javax.swing.JFrame { 
     static boolean success = false;
@@ -354,6 +355,11 @@ public class LoginSystem extends javax.swing.JFrame {
                 outputLabel.setForeground(new java.awt.Color(34, 139, 34));
                 outputLabel.setText("Logging in...");
                 welcomeUser();
+                PlannerFrame jfrm2= new PlannerFrame();
+                jfrm2.setVisible(true);
+                this.setVisible(false);
+                this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+                this.dispose();
             } else if (result == 2) {
                 outputLabel.setForeground(new java.awt.Color(255, 0, 0));
                 outputLabel.setText("The password is incorrect.");
@@ -505,5 +511,3 @@ public class LoginSystem extends javax.swing.JFrame {
     private javax.swing.JFrame welcomeFrame;
     // End of variables declaration//GEN-END:variables
 }
-
-

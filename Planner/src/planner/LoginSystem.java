@@ -230,10 +230,12 @@ public class LoginSystem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void welcomeUser() throws InterruptedException {
-        welcomeFrame.pack();
-        welcomeFrame.setLocationRelativeTo(null);
-        welcomeFrame.setVisible(true);
+    private void welcomeUser() {
+        PlannerFrame jfrm2= new PlannerFrame();
+        jfrm2.setLocationRelativeTo(null);
+        jfrm2.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
         success = true;
     }
     
@@ -355,11 +357,6 @@ public class LoginSystem extends javax.swing.JFrame {
                 outputLabel.setForeground(new java.awt.Color(34, 139, 34));
                 outputLabel.setText("Logging in...");
                 welcomeUser();
-                PlannerFrame jfrm2= new PlannerFrame();
-                jfrm2.setVisible(true);
-                this.setVisible(false);
-                this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-                this.dispose();
             } else if (result == 2) {
                 outputLabel.setForeground(new java.awt.Color(255, 0, 0));
                 outputLabel.setText("The password is incorrect.");
@@ -371,8 +368,6 @@ public class LoginSystem extends javax.swing.JFrame {
                 outputLabel.setText("User not found, please register.");
             }
         } catch (IOException ex) {
-            Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
             Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_loginButtonActionPerformed

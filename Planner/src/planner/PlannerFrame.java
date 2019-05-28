@@ -5,12 +5,10 @@ HEADER
 */
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 public class PlannerFrame extends javax.swing.JFrame {
     public PlannerFrame() {
@@ -18,11 +16,17 @@ public class PlannerFrame extends javax.swing.JFrame {
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E. MMM dd, yyyy");
         String formattedDate = myDateObj.format(myFormatObj);
-        //System.out.println(formattedDate);
         dateLabel = new JLabel(formattedDate);
         dateLabel.setBounds(10, 10, 100, 20);
         dashPane.setLayout(null);
         dashPane.add(dateLabel);
+        
+        newColorChooser.setPreviewPanel(new JPanel());
+        AbstractColorChooserPanel[] oldPanels = newColorChooser.getChooserPanels();
+        newColorChooser.removeChooserPanel(oldPanels[1]);
+        newColorChooser.removeChooserPanel(oldPanels[2]);
+        newColorChooser.removeChooserPanel(oldPanels[4]);
+        newEventFrame.pack();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,74 +34,114 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         newEventFrame = new javax.swing.JFrame();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        newTitleLabel = new javax.swing.JLabel();
+        newTitleField = new javax.swing.JTextField();
+        newDescLabel = new javax.swing.JLabel();
+        newDescField = new javax.swing.JTextField();
+        newDDLabel = new javax.swing.JLabel();
+        newDDField = new javax.swing.JTextField();
+        newColorChooser = new javax.swing.JColorChooser();
+        newColorLabel = new javax.swing.JLabel();
+        addButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         addEventButton = new javax.swing.JButton();
         calendarPane = new javax.swing.JPanel();
         notesPane = new javax.swing.JPanel();
 
-        jLabel1.setText("Event Title");
+        newEventFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        newEventFrame.setMinimumSize(new java.awt.Dimension(660, 550));
+        newEventFrame.setPreferredSize(new java.awt.Dimension(660, 550));
 
-        jTextField1.setText("jTextField1");
+        newTitleLabel.setText("Title:");
 
-        jLabel2.setText("Event Descripion");
+        newDescLabel.setText("Description:");
 
-        jTextField2.setText("jTextField2");
+        newDDLabel.setText("Due Date:");
 
-        jLabel3.setText("Event Date");
+        newColorLabel.setText("Event Color:");
 
-        jTextField3.setText("jTextField3");
+        addButton.setText("Create Event");
+
+        cancelButton.setText("Cancel");
 
         javax.swing.GroupLayout newEventFrameLayout = new javax.swing.GroupLayout(newEventFrame.getContentPane());
         newEventFrame.getContentPane().setLayout(newEventFrameLayout);
         newEventFrameLayout.setHorizontalGroup(
             newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newEventFrameLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(newEventFrameLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
+                                .addComponent(newTitleLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newTitleField))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
+                                .addComponent(newDescLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(newDescField))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
+                                .addComponent(newColorLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
+                                .addComponent(newDDLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(newDDField))))
                     .addGroup(newEventFrameLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(newEventFrameLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(233, Short.MAX_VALUE))
+                        .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(newEventFrameLayout.createSequentialGroup()
+                                .addGap(180, 180, 180)
+                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
+                                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(newEventFrameLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(newColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 25, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         newEventFrameLayout.setVerticalGroup(
             newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(newEventFrameLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newEventFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newTitleLabel)
+                    .addComponent(newTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newDescLabel)
+                    .addComponent(newDescField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(200, Short.MAX_VALUE))
+                    .addComponent(newDDLabel)
+                    .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(newColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(newColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(36, 36, 36))
         );
 
+        newEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, cancelButton});
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Worklet Planner");
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
 
         addEventButton.setText("ADD NEW EVENT");
+        addEventButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEventButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dashPaneLayout = new javax.swing.GroupLayout(dashPane);
         dashPane.setLayout(dashPaneLayout);
@@ -164,6 +208,10 @@ public class PlannerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
+        newEventFrame.setVisible(true);
+    }//GEN-LAST:event_addEventButtonActionPerformed
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -194,16 +242,20 @@ public class PlannerFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
     private javax.swing.JButton addEventButton;
     private javax.swing.JPanel calendarPane;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JColorChooser newColorChooser;
+    private javax.swing.JLabel newColorLabel;
+    private javax.swing.JTextField newDDField;
+    private javax.swing.JLabel newDDLabel;
+    private javax.swing.JTextField newDescField;
+    private javax.swing.JLabel newDescLabel;
     private javax.swing.JFrame newEventFrame;
+    private javax.swing.JTextField newTitleField;
+    private javax.swing.JLabel newTitleLabel;
     private javax.swing.JPanel notesPane;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables

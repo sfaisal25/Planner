@@ -1,16 +1,25 @@
 package planner;
 
-/*
-HEADER
-*/
-
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 public class PlannerFrame extends javax.swing.JFrame {
+    public List<String> events;
+    public String user = LoginSystem.user;
+    
     public PlannerFrame() {
         initComponents();
         LocalDateTime myDateObj = LocalDateTime.now();
@@ -63,8 +72,18 @@ public class PlannerFrame extends javax.swing.JFrame {
         newColorLabel.setText("Event Color:");
 
         addButton.setText("Create Event");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout newEventFrameLayout = new javax.swing.GroupLayout(newEventFrame.getContentPane());
         newEventFrame.getContentPane().setLayout(newEventFrameLayout);
@@ -111,18 +130,18 @@ public class PlannerFrame extends javax.swing.JFrame {
                     .addComponent(newTitleLabel)
                     .addComponent(newTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newDescLabel)
-                    .addComponent(newDescField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newDDLabel)
-                    .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(newDescField))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newDDLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -212,6 +231,28 @@ public class PlannerFrame extends javax.swing.JFrame {
         newEventFrame.setVisible(true);
     }//GEN-LAST:event_addEventButtonActionPerformed
 
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        newEventFrame.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        System.out.println(newColorChooser.getColor());
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    public void readFile() {
+        System.out.println(user);
+        Scanner in = null;
+        try {
+            File file = new File(user+".txt");
+            in = new Scanner(file);
+            Path path = Paths.get(user+".txt");
+            events = Files.readAllLines(path, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(events);
+    }
+    
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -234,10 +275,12 @@ public class PlannerFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PlannerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+        PlannerFrame frame = new PlannerFrame();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PlannerFrame().setVisible(true);
+                frame.readFile();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }

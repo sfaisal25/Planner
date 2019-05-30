@@ -1,6 +1,10 @@
 package planner;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -17,7 +22,9 @@ import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 public class PlannerFrame extends javax.swing.JFrame {
-    public List<String> events;
+    public List<String> oldEvents;
+    public List<String> newEvents;
+    public List<JPanel> eventPanels = new ArrayList<>();
     public String user = LoginSystem.user;
     
     public PlannerFrame() {
@@ -26,7 +33,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E. MMM dd, yyyy");
         String formattedDate = myDateObj.format(myFormatObj);
         dateLabel = new JLabel(formattedDate);
-        dateLabel.setBounds(10, 10, 100, 20);
+        dateLabel.setBounds(10, 10, 130, 20);
         dashPane.setLayout(null);
         dashPane.add(dateLabel);
         
@@ -56,12 +63,12 @@ public class PlannerFrame extends javax.swing.JFrame {
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         addEventButton = new javax.swing.JButton();
+        jScrollBar1 = new javax.swing.JScrollBar();
         calendarPane = new javax.swing.JPanel();
         notesPane = new javax.swing.JPanel();
 
         newEventFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         newEventFrame.setMinimumSize(new java.awt.Dimension(660, 550));
-        newEventFrame.setPreferredSize(new java.awt.Dimension(660, 550));
 
         newTitleLabel.setText("Title:");
 
@@ -167,16 +174,20 @@ public class PlannerFrame extends javax.swing.JFrame {
         dashPaneLayout.setHorizontalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPaneLayout.createSequentialGroup()
-                .addContainerGap(672, Short.MAX_VALUE)
+                .addContainerGap(652, Short.MAX_VALUE)
                 .addComponent(addEventButton)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashPaneLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         dashPaneLayout.setVerticalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(addEventButton)
-                .addContainerGap(538, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         tabbedPane.addTab("Dashboard", dashPane);
@@ -185,7 +196,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane.setLayout(calendarPaneLayout);
         calendarPaneLayout.setHorizontalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
         calendarPaneLayout.setVerticalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,7 +209,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         notesPane.setLayout(notesPaneLayout);
         notesPaneLayout.setHorizontalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
         notesPaneLayout.setVerticalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,10 +238,6 @@ public class PlannerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
-        newEventFrame.setVisible(true);
-    }//GEN-LAST:event_addEventButtonActionPerformed
-
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         newEventFrame.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
@@ -239,18 +246,57 @@ public class PlannerFrame extends javax.swing.JFrame {
         System.out.println(newColorChooser.getColor());
     }//GEN-LAST:event_addButtonActionPerformed
 
-    public void readFile() {
+    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
+        newEventFrame.setVisible(true);
+    }//GEN-LAST:event_addEventButtonActionPerformed
+  
+    private void readFile() {
         System.out.println(user);
         Scanner in = null;
         try {
             File file = new File(user+".txt");
-            in = new Scanner(file);
             Path path = Paths.get(user+".txt");
-            events = Files.readAllLines(path, StandardCharsets.UTF_8);
+            oldEvents = Files.readAllLines(path, StandardCharsets.UTF_8);
+            newEvents = new ArrayList<String>(oldEvents);
+            in = new Scanner(file);
         } catch (IOException ex) {
             Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(events);
+    }
+    
+    private void displayEvents() {
+        int y = 40;
+        for (String line : newEvents) {
+            String[] words = line.split(";");
+            JPanel panel = new JPanel(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            panel.setBackground(new Color(192,192,192));
+            
+            c.weighty = 0.1;
+            c.weightx = 0.1;
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 0;
+            c.gridy = 0;
+            panel.add(new JLabel(" "+words[0]), c);
+            c.gridx = 0;
+            c.gridy = 1;
+            panel.add(new JLabel(" "+words[1]), c);
+            c.gridx = 0;
+            c.gridy = 2;
+            panel.add(new JLabel(" "+words[2]), c);
+            c.gridx = 2;
+            c.gridy = 1;
+            c.anchor = GridBagConstraints.LINE_END;
+            JButton editB = new JButton("Edit");
+            //editB.setSize(100, 30);
+            panel.add(editB, c);
+            
+            dashPane.setLayout(null);
+            panel.setBounds(0, y, 600, 60);
+            dashPane.add(panel);
+            eventPanels.add(panel);
+            y += panel.getY()+30;
+        }
     }
     
     public static void main(String args[]) {
@@ -279,6 +325,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 frame.readFile();
+                frame.displayEvents();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -290,6 +337,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel calendarPane;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
+    private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JColorChooser newColorChooser;
     private javax.swing.JLabel newColorLabel;
     private javax.swing.JTextField newDDField;

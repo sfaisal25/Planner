@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -63,7 +64,6 @@ public class PlannerFrame extends javax.swing.JFrame {
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         addEventButton = new javax.swing.JButton();
-        jScrollBar1 = new javax.swing.JScrollBar();
         calendarPane = new javax.swing.JPanel();
         notesPane = new javax.swing.JPanel();
 
@@ -74,7 +74,7 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         newDescLabel.setText("Description:");
 
-        newDDLabel.setText("Due Date:");
+        newDDLabel.setText("Due Date (mm/dd/yyyy):");
 
         newColorLabel.setText("Event Color:");
 
@@ -119,9 +119,9 @@ public class PlannerFrame extends javax.swing.JFrame {
                     .addGroup(newEventFrameLayout.createSequentialGroup()
                         .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(newEventFrameLayout.createSequentialGroup()
-                                .addGap(180, 180, 180)
+                                .addGap(179, 179, 179)
                                 .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(60, 60, 60)
+                                .addGap(61, 61, 61)
                                 .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(newEventFrameLayout.createSequentialGroup()
                                 .addContainerGap()
@@ -139,20 +139,23 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newDescLabel)
-                    .addComponent(newDescField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(newDescField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newDDLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(newEventFrameLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newEventFrameLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(newDDLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(36, 36, 36))
+                .addGap(15, 15, 15)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelButton))
+                .addGap(27, 27, 27))
         );
 
         newEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, cancelButton});
@@ -174,20 +177,16 @@ public class PlannerFrame extends javax.swing.JFrame {
         dashPaneLayout.setHorizontalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPaneLayout.createSequentialGroup()
-                .addContainerGap(652, Short.MAX_VALUE)
+                .addContainerGap(672, Short.MAX_VALUE)
                 .addComponent(addEventButton)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashPaneLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         dashPaneLayout.setVerticalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(addEventButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(538, 538, 538))
         );
 
         tabbedPane.addTab("Dashboard", dashPane);
@@ -196,11 +195,11 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane.setLayout(calendarPaneLayout);
         calendarPaneLayout.setHorizontalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 775, Short.MAX_VALUE)
+            .addGap(0, 795, Short.MAX_VALUE)
         );
         calendarPaneLayout.setVerticalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+            .addGap(0, 588, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Calendar", calendarPane);
@@ -209,11 +208,11 @@ public class PlannerFrame extends javax.swing.JFrame {
         notesPane.setLayout(notesPaneLayout);
         notesPaneLayout.setHorizontalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 775, Short.MAX_VALUE)
+            .addGap(0, 795, Short.MAX_VALUE)
         );
         notesPaneLayout.setVerticalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+            .addGap(0, 588, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Notes", notesPane);
@@ -238,20 +237,32 @@ public class PlannerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
+        newEventFrame.setVisible(true);
+    }//GEN-LAST:event_addEventButtonActionPerformed
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         newEventFrame.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        System.out.println(newColorChooser.getColor());
+        String line = "";
+        Color color = newColorChooser.getColor();
+        line += newTitleField.getText()+";"+newDescField.getText()+";"+newDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
+        System.out.println(line);
+        newEvents.add(line);
+        displayEvents();
     }//GEN-LAST:event_addButtonActionPerformed
-
-    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
-        newEventFrame.setVisible(true);
-    }//GEN-LAST:event_addEventButtonActionPerformed
   
+    private void delBButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("deleting...");
+    }
+    
+    private void editBButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("editing...");
+    }
+    
     private void readFile() {
-        System.out.println(user);
         Scanner in = null;
         try {
             File file = new File(user+".txt");
@@ -265,8 +276,10 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     
     private void displayEvents() {
+        System.out.println(newEvents);
         int y = 40;
         for (String line : newEvents) {
+            System.out.println("displaying...");
             String[] words = line.split(";");
             JPanel panel = new JPanel(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -285,17 +298,22 @@ public class PlannerFrame extends javax.swing.JFrame {
             c.gridy = 2;
             panel.add(new JLabel(" "+words[2]), c);
             c.gridx = 2;
-            c.gridy = 1;
+            c.gridy = 0;
             c.anchor = GridBagConstraints.LINE_END;
             JButton editB = new JButton("Edit");
-            //editB.setSize(100, 30);
+            editB.addActionListener(this::editBButtonActionPerformed);
             panel.add(editB, c);
+            c.gridy = 2;
+            JButton delB = new JButton("Delete");
+            delB.addActionListener(this::delBButtonActionPerformed);
+            panel.add(delB, c);
             
             dashPane.setLayout(null);
             panel.setBounds(0, y, 600, 60);
             dashPane.add(panel);
             eventPanels.add(panel);
-            y += panel.getY()+30;
+            y += panel.getHeight()+10;
+            dashPane.updateUI();
         }
     }
     
@@ -337,7 +355,6 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel calendarPane;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
-    private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JColorChooser newColorChooser;
     private javax.swing.JLabel newColorLabel;
     private javax.swing.JTextField newDDField;

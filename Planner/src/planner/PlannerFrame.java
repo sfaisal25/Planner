@@ -1,11 +1,9 @@
 package planner;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,13 +28,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     
     public PlannerFrame() {
         initComponents();
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E. MMM dd, yyyy");
-        String formattedDate = myDateObj.format(myFormatObj);
-        dateLabel = new JLabel(formattedDate);
-        dateLabel.setBounds(10, 10, 130, 20);
-        dashPane.setLayout(null);
-        dashPane.add(dateLabel);
+        addDefaultC();
         
         newColorChooser.setPreviewPanel(new JPanel());
         AbstractColorChooserPanel[] oldPanels = newColorChooser.getChooserPanels();
@@ -61,11 +53,15 @@ public class PlannerFrame extends javax.swing.JFrame {
         newColorLabel = new javax.swing.JLabel();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        logoutFrame = new javax.swing.JFrame();
+        logoutLabel = new javax.swing.JLabel();
+        logYesButton = new javax.swing.JButton();
+        logCancelButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
-        addEventButton = new javax.swing.JButton();
         calendarPane = new javax.swing.JPanel();
         notesPane = new javax.swing.JPanel();
+        logoutButton = new javax.swing.JButton();
 
         newEventFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         newEventFrame.setMinimumSize(new java.awt.Dimension(660, 550));
@@ -160,33 +156,73 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         newEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, cancelButton});
 
+        logoutFrame.setMinimumSize(new java.awt.Dimension(200, 100));
+        logoutFrame.setPreferredSize(new java.awt.Dimension(200, 100));
+        logoutFrame.setResizable(false);
+
+        logoutLabel.setText("Are you sure you want to log out?");
+
+        logYesButton.setText("Yes");
+        logYesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logYesButtonActionPerformed(evt);
+            }
+        });
+
+        logCancelButton.setText("Cancel");
+        logCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logCancelButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout logoutFrameLayout = new javax.swing.GroupLayout(logoutFrame.getContentPane());
+        logoutFrame.getContentPane().setLayout(logoutFrameLayout);
+        logoutFrameLayout.setHorizontalGroup(
+            logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoutFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(logoutFrameLayout.createSequentialGroup()
+                        .addComponent(logoutLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(logoutFrameLayout.createSequentialGroup()
+                        .addComponent(logYesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logCancelButton)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        logoutFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {logCancelButton, logYesButton});
+
+        logoutFrameLayout.setVerticalGroup(
+            logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoutFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logoutLabel)
+                .addGap(18, 18, 18)
+                .addGroup(logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logYesButton)
+                    .addComponent(logCancelButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        logoutFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {logCancelButton, logYesButton});
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Worklet Planner");
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        addEventButton.setText("ADD NEW EVENT");
-        addEventButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addEventButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout dashPaneLayout = new javax.swing.GroupLayout(dashPane);
         dashPane.setLayout(dashPaneLayout);
         dashPaneLayout.setHorizontalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashPaneLayout.createSequentialGroup()
-                .addContainerGap(672, Short.MAX_VALUE)
-                .addComponent(addEventButton)
-                .addContainerGap())
+            .addGap(0, 775, Short.MAX_VALUE)
         );
         dashPaneLayout.setVerticalGroup(
             dashPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(addEventButton)
-                .addGap(538, 538, 538))
+            .addGap(0, 525, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Dashboard", dashPane);
@@ -217,6 +253,13 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Notes", notesPane);
 
+        logoutButton.setText("Log Out");
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,11 +268,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(logoutButton))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(logoutButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
@@ -237,10 +284,26 @@ public class PlannerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
+    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
         newEventFrame.setVisible(true);
-    }//GEN-LAST:event_addEventButtonActionPerformed
-
+    }
+    
+    private void addDefaultC() {
+        dashPane.setLayout(null);
+        addEventButton = new JButton("Add Event");
+        addEventButton.addActionListener(PlannerFrame.this::addEventButtonActionPerformed);
+        addEventButton.setBounds(650, 10, 100, 40);
+        dashPane.add(addEventButton);
+        
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E. MMM dd, yyyy");
+        String formattedDate = myDateObj.format(myFormatObj);
+        dateLabel = new JLabel(formattedDate);
+        dateLabel.setBounds(10, 10, 130, 20);
+        dashPane.setLayout(null);
+        dashPane.add(dateLabel);
+    }
+    
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         newEventFrame.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
@@ -251,14 +314,41 @@ public class PlannerFrame extends javax.swing.JFrame {
         line += newTitleField.getText()+";"+newDescField.getText()+";"+newDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
         System.out.println(line);
         newEvents.add(line);
+        dashPane.removeAll();
+        addDefaultC();
         displayEvents();
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+        logoutFrame.setLocationRelativeTo(null);
+        logoutFrame.setVisible(true);
+    }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void logYesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logYesButtonActionPerformed
+        
+    }//GEN-LAST:event_logYesButtonActionPerformed
+
+    private void logCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logCancelButtonActionPerformed
+        logoutFrame.dispose();
+    }//GEN-LAST:event_logCancelButtonActionPerformed
   
-    private void delBButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void delBButtonActionPerformed(ActionEvent evt, JButton delB) {
         System.out.println("deleting...");
+        System.out.println(eventPanels.size()+" "+eventPanels);
+        for (int i=0;i<eventPanels.size();i++) {
+            System.out.println(eventPanels.get(i).isAncestorOf(delB));
+            if (eventPanels.get(i).isAncestorOf(delB)) {
+                newEvents.remove(i);
+                dashPane.removeAll();
+                addDefaultC();
+                displayEvents();
+                System.out.println("yes");
+            }
+        }
+        System.out.println("done deleting");
     }
     
-    private void editBButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void editBButtonActionPerformed(java.awt.event.ActionEvent evt, javax.swing.JButton b) {
         System.out.println("editing...");
     }
     
@@ -268,7 +358,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             File file = new File(user+".txt");
             Path path = Paths.get(user+".txt");
             oldEvents = Files.readAllLines(path, StandardCharsets.UTF_8);
-            newEvents = new ArrayList<String>(oldEvents);
+            newEvents = new ArrayList<>(oldEvents);
             in = new Scanner(file);
         } catch (IOException ex) {
             Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
@@ -276,6 +366,11 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     
     private void displayEvents() {
+        dashPane.repaint();
+        dashPane.revalidate();
+        repaint();
+        revalidate();
+        eventPanels.clear();
         System.out.println(newEvents);
         int y = 40;
         for (String line : newEvents) {
@@ -285,27 +380,32 @@ public class PlannerFrame extends javax.swing.JFrame {
             GridBagConstraints c = new GridBagConstraints();
             panel.setBackground(new Color(192,192,192));
             
-            c.weighty = 0.1;
-            c.weightx = 0.1;
+            c.weighty = 1.0;
+            c.weightx = 1.0;
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 0;
             panel.add(new JLabel(" "+words[0]), c);
             c.gridx = 0;
-            c.gridy = 1;
+            c.gridy = 2;
             panel.add(new JLabel(" "+words[1]), c);
             c.gridx = 0;
-            c.gridy = 2;
+            c.gridy = 4;
             panel.add(new JLabel(" "+words[2]), c);
+            c.gridheight = 1;
             c.gridx = 2;
             c.gridy = 0;
             c.anchor = GridBagConstraints.LINE_END;
             JButton editB = new JButton("Edit");
-            editB.addActionListener(this::editBButtonActionPerformed);
+            editB.addActionListener((ActionEvent evt) -> {
+                PlannerFrame.this.editBButtonActionPerformed(evt, editB);
+            });
             panel.add(editB, c);
-            c.gridy = 2;
+            c.gridy = 4;
             JButton delB = new JButton("Delete");
-            delB.addActionListener(this::delBButtonActionPerformed);
+            delB.addActionListener((ActionEvent evt) -> {
+                PlannerFrame.this.delBButtonActionPerformed(evt, delB);
+            });
             panel.add(delB, c);
             
             dashPane.setLayout(null);
@@ -313,7 +413,10 @@ public class PlannerFrame extends javax.swing.JFrame {
             dashPane.add(panel);
             eventPanels.add(panel);
             y += panel.getHeight()+10;
-            dashPane.updateUI();
+            dashPane.repaint();
+            dashPane.revalidate();
+            repaint();
+            revalidate();
         }
     }
     
@@ -351,10 +454,14 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JButton addEventButton;
     private javax.swing.JPanel calendarPane;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
+    private javax.swing.JButton logCancelButton;
+    private javax.swing.JButton logYesButton;
+    private javax.swing.JButton logoutButton;
+    private javax.swing.JFrame logoutFrame;
+    private javax.swing.JLabel logoutLabel;
     private javax.swing.JColorChooser newColorChooser;
     private javax.swing.JLabel newColorLabel;
     private javax.swing.JTextField newDDField;
@@ -368,4 +475,5 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
     private JLabel dateLabel;
+    private JButton addEventButton;
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 public class PlannerFrame extends javax.swing.JFrame {
@@ -57,6 +59,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         logoutLabel = new javax.swing.JLabel();
         logYesButton = new javax.swing.JButton();
         logCancelButton = new javax.swing.JButton();
+        logNoButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         calendarPane = new javax.swing.JPanel();
@@ -156,11 +159,11 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         newEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, cancelButton});
 
-        logoutFrame.setMinimumSize(new java.awt.Dimension(200, 100));
-        logoutFrame.setPreferredSize(new java.awt.Dimension(200, 100));
+        logoutFrame.setMinimumSize(new java.awt.Dimension(235, 100));
+        logoutFrame.setPreferredSize(new java.awt.Dimension(235, 100));
         logoutFrame.setResizable(false);
 
-        logoutLabel.setText("Are you sure you want to log out?");
+        logoutLabel.setText("Do you want to save your changes?");
 
         logYesButton.setText("Yes");
         logYesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -176,38 +179,47 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         });
 
+        logNoButton.setText("No");
+        logNoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logNoButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout logoutFrameLayout = new javax.swing.GroupLayout(logoutFrame.getContentPane());
         logoutFrame.getContentPane().setLayout(logoutFrameLayout);
         logoutFrameLayout.setHorizontalGroup(
             logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logoutFrameLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(logoutFrameLayout.createSequentialGroup()
-                        .addComponent(logoutLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(logoutFrameLayout.createSequentialGroup()
-                        .addComponent(logYesButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logCancelButton)))
+                .addComponent(logYesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(logNoButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(logCancelButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutFrameLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoutLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        logoutFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {logCancelButton, logYesButton});
+        logoutFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {logCancelButton, logNoButton, logYesButton});
 
         logoutFrameLayout.setVerticalGroup(
             logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logoutFrameLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(logoutLabel)
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(logoutFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logYesButton)
-                    .addComponent(logCancelButton))
+                    .addComponent(logCancelButton)
+                    .addComponent(logNoButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        logoutFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {logCancelButton, logYesButton});
+        logoutFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {logCancelButton, logNoButton, logYesButton});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Worklet Planner");
@@ -325,12 +337,27 @@ public class PlannerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void logYesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logYesButtonActionPerformed
-        
+        logoutFrame.dispose();
+        System.out.println("logging out...");
+        try {
+            Files.write(Paths.get(user+".txt"), newEvents, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dispose();
+        LoginSystem.main(new String[0]);
     }//GEN-LAST:event_logYesButtonActionPerformed
 
     private void logCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logCancelButtonActionPerformed
         logoutFrame.dispose();
     }//GEN-LAST:event_logCancelButtonActionPerformed
+
+    private void logNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logNoButtonActionPerformed
+        logoutFrame.dispose();
+        System.out.println("logging out...");
+        dispose();
+        LoginSystem.main(new String[0]);
+    }//GEN-LAST:event_logNoButtonActionPerformed
   
     private void delBButtonActionPerformed(ActionEvent evt, JButton delB) {
         System.out.println("deleting...");
@@ -409,8 +436,15 @@ public class PlannerFrame extends javax.swing.JFrame {
             panel.add(delB, c);
             
             dashPane.setLayout(null);
-            panel.setBounds(0, y, 600, 60);
+            panel.setBounds(18, y, 600, 60);
             dashPane.add(panel);
+            
+            JPanel panel2 = new JPanel();
+            panel2.setBounds(0, y, 15, 60);
+            LineBorder border = new LineBorder(new Color(Integer.parseInt(words[3]),Integer.parseInt(words[4]),Integer.parseInt(words[5])), 20, true);
+            panel2.setBorder(border);
+            dashPane.add(panel2);
+            
             eventPanels.add(panel);
             y += panel.getHeight()+10;
             dashPane.repaint();
@@ -458,6 +492,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
     private javax.swing.JButton logCancelButton;
+    private javax.swing.JButton logNoButton;
     private javax.swing.JButton logYesButton;
     private javax.swing.JButton logoutButton;
     private javax.swing.JFrame logoutFrame;

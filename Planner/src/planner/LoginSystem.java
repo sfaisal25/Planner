@@ -1,5 +1,6 @@
 package planner;
 
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -419,8 +420,7 @@ public class LoginSystem extends javax.swing.JFrame {
     }
     
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        dispose();
-        System.exit(0);
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void resetPassButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetPassButtonActionPerformed

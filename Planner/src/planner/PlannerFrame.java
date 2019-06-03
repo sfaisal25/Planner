@@ -28,6 +28,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     public PlannerFrame() {
         initComponents();
         lblMonth = new JLabel ("January");
+        labelText =new JLabel ("ERROR");
         lblYear = new JLabel ("Change year:");
         cmbYear = new JComboBox();
         btnPrev = new JButton ("Previous");
@@ -41,7 +42,8 @@ public class PlannerFrame extends javax.swing.JFrame {
         pnlCalendar.setBorder(BorderFactory.createTitledBorder("Calendar"));
         calendarPane.setLayout (null);
         calendarPane.add(lblMonth, BorderLayout.PAGE_START);
-        
+          setResizable(false);
+
         btnPrev.addActionListener(new btnPrev_Action());
         btnNext.addActionListener(new btnNext_Action());
         cmbYear.addActionListener(new cmbYear_Action());
@@ -53,7 +55,8 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane.add(btnPrev);
         calendarPane.add(btnNext);
         calendarPane.add(stblCalendar);
-        
+         calendarPane.setBackground(new Color(255, 229, 153));
+
         calendarPane.setBounds(0, 0, calendarPane.getWidth(), calendarPane.getHeight());
         lblMonth.setBounds(160-lblMonth.getPreferredSize().width/2, 25, 100, 25);
         lblYear.setBounds(575, 450, 80, 20);
@@ -61,11 +64,8 @@ public class PlannerFrame extends javax.swing.JFrame {
         btnPrev.setBounds(100, 25, 100, 25);
         btnNext.setBounds(600, 25, 100, 25);
         stblCalendar.setBounds(0, 50, calendarPane.getWidth(), calendarPane.getHeight());
-        
-        outputLabel.setBounds(200,200,200,200);
-        outputLabel.setResizable(false);
 
-        
+
          GregorianCalendar cal = new GregorianCalendar(); //Create calendar
         calDay = cal.get(GregorianCalendar.DAY_OF_MONTH); //Get day
         calMonth = cal.get(GregorianCalendar.MONTH); //Get month
@@ -78,7 +78,9 @@ public class PlannerFrame extends javax.swing.JFrame {
             mtblCalendar.addColumn(headers[i]);
         }
         
-                tblCalendar.getParent().setBackground(tblCalendar.getBackground()); //Set background
+                tblCalendar.setBackground(new Color(255, 229, 153));
+                setBackground(new Color(255, 229, 153));
+
         
         //No resize/reorder
         tblCalendar.getTableHeader().setResizingAllowed(false);
@@ -95,7 +97,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         mtblCalendar.setRowCount(6);
         
         //Populate table
-        for (int i=calYear-2; i<=calYear+2; i++){
+        for (int i=calYear; i<=calYear+1; i++){
             cmbYear.addItem(String.valueOf(i));
         }
                 
@@ -222,7 +224,9 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Worklet Planner");
+        setBackground(new java.awt.Color(255, 229, 153));
 
+        tabbedPane.setBackground(new java.awt.Color(250, 250, 250));
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
 
         addEventButton.setText("ADD NEW EVENT");
@@ -250,6 +254,8 @@ public class PlannerFrame extends javax.swing.JFrame {
         );
 
         tabbedPane.addTab("Dashboard", dashPane);
+
+        calendarPane.setBackground(new java.awt.Color(255, 229, 153));
 
         javax.swing.GroupLayout calendarPaneLayout = new javax.swing.GroupLayout(calendarPane);
         calendarPane.setLayout(calendarPaneLayout);
@@ -296,7 +302,7 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    static JLabel lblMonth, lblYear;
+    static JLabel lblMonth, lblYear, labelText;
     static JButton btnPrev, btnNext;
     boolean confirmed=false;
     static JTable tblCalendar;
@@ -307,7 +313,6 @@ public class PlannerFrame extends javax.swing.JFrame {
     static JScrollPane stblCalendar; //The scrollpane
     static JPanel pnlCalendar;
     static JFrame outputLabel;
-    static JLabel labelText;
     static int calYear, calMonth, calDay, currentYear, currentMonth;
 
     private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventButtonActionPerformed
@@ -320,8 +325,18 @@ public class PlannerFrame extends javax.swing.JFrame {
         int nod, som; //Number Of Days, Start Of Month
         
         //Allow/disallow buttons
+        if (currentYear==calYear && currentMonth==0){
+            btnPrev.setEnabled(false);
+        }
+        else{
         btnPrev.setEnabled(true);
+        }
+        if (currentYear==2020 && currentMonth==11){
+            btnNext.setEnabled(false);
+        }
+        else{
         btnNext.setEnabled(true);
+        }
         if (month == 0 && year <= calYear-10){
             btnPrev.setEnabled(false);
         } //Too early
@@ -363,7 +378,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 setBackground(new Color(255, 220, 220));
             }
             else{ //Week
-                setBackground(new Color(255, 255, 255));
+                setBackground(new Color(255, 229, 153));
             }
             if (value != null){
                 if (Integer.parseInt(value.toString()) == calDay && currentMonth == calMonth && currentYear == calYear){ //Today
@@ -404,11 +419,6 @@ public class PlannerFrame extends javax.swing.JFrame {
                 currentMonth = 0;
                 currentYear += 1;
             }
-            else if (currentYear>=2022){
-                currentYear=2021;
-                outputLabel.setVisible(true);
-
-            }
             else{ //Foward one month
                 currentMonth += 1;
             }
@@ -430,11 +440,10 @@ public class PlannerFrame extends javax.swing.JFrame {
     public static void main(String args[]) {
 
 
-        //</editor-fold>
-        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new PlannerFrame().setVisible(true);
+
                 
             }
         });

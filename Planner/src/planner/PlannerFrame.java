@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +26,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     public List<String> newEvents;
     public List<JPanel> eventPanels = new ArrayList<>();
     public String user = LoginSystem.user;
+    public int tmpIndex;
     
     public PlannerFrame() {
         initComponents();
@@ -38,6 +38,13 @@ public class PlannerFrame extends javax.swing.JFrame {
         newColorChooser.removeChooserPanel(oldPanels[2]);
         newColorChooser.removeChooserPanel(oldPanels[4]);
         newEventFrame.pack();
+        
+        editColorChooser.setPreviewPanel(new JPanel());
+        AbstractColorChooserPanel[] oldPanels2 = editColorChooser.getChooserPanels();
+        editColorChooser.removeChooserPanel(oldPanels2[1]);
+        editColorChooser.removeChooserPanel(oldPanels2[2]);
+        editColorChooser.removeChooserPanel(oldPanels2[4]);
+        editEventFrame.pack();
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +67,17 @@ public class PlannerFrame extends javax.swing.JFrame {
         logYesButton = new javax.swing.JButton();
         logCancelButton = new javax.swing.JButton();
         logNoButton = new javax.swing.JButton();
+        editEventFrame = new javax.swing.JFrame();
+        editTitleLabel = new javax.swing.JLabel();
+        editTitleField = new javax.swing.JTextField();
+        editDescLabel = new javax.swing.JLabel();
+        editDescField = new javax.swing.JTextField();
+        editDDLabel = new javax.swing.JLabel();
+        editDDField = new javax.swing.JTextField();
+        editColorChooser = new javax.swing.JColorChooser();
+        editColorLabel = new javax.swing.JLabel();
+        editButton = new javax.swing.JButton();
+        editCancelButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         calendarPane = new javax.swing.JPanel();
@@ -160,7 +178,6 @@ public class PlannerFrame extends javax.swing.JFrame {
         newEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, cancelButton});
 
         logoutFrame.setMinimumSize(new java.awt.Dimension(235, 100));
-        logoutFrame.setPreferredSize(new java.awt.Dimension(235, 100));
         logoutFrame.setResizable(false);
 
         logoutLabel.setText("Do you want to save your changes?");
@@ -220,6 +237,102 @@ public class PlannerFrame extends javax.swing.JFrame {
         );
 
         logoutFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {logCancelButton, logNoButton, logYesButton});
+
+        editEventFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        editEventFrame.setMinimumSize(new java.awt.Dimension(660, 550));
+
+        editTitleLabel.setText("Title:");
+
+        editDescLabel.setText("Description:");
+
+        editDDLabel.setText("Due Date (mm/dd/yyyy):");
+
+        editColorLabel.setText("Event Color:");
+
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+
+        editCancelButton.setText("Cancel");
+        editCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editCancelButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout editEventFrameLayout = new javax.swing.GroupLayout(editEventFrame.getContentPane());
+        editEventFrame.getContentPane().setLayout(editEventFrameLayout);
+        editEventFrameLayout.setHorizontalGroup(
+            editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editEventFrameLayout.createSequentialGroup()
+                .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(editEventFrameLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, editEventFrameLayout.createSequentialGroup()
+                                .addComponent(editTitleLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editTitleField))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, editEventFrameLayout.createSequentialGroup()
+                                .addComponent(editDescLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(editDescField))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, editEventFrameLayout.createSequentialGroup()
+                                .addComponent(editColorLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, editEventFrameLayout.createSequentialGroup()
+                                .addComponent(editDDLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(editDDField))))
+                    .addGroup(editEventFrameLayout.createSequentialGroup()
+                        .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(editEventFrameLayout.createSequentialGroup()
+                                .addGap(179, 179, 179)
+                                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)
+                                .addComponent(editCancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(editEventFrameLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(editColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 25, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        editEventFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {editButton, editCancelButton});
+
+        editEventFrameLayout.setVerticalGroup(
+            editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editEventFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editTitleLabel)
+                    .addComponent(editTitleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(editDescLabel)
+                    .addComponent(editDescField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(editEventFrameLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(editDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editEventFrameLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editDDLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(editEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editCancelButton))
+                .addGap(27, 27, 27))
+        );
+
+        editEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {editButton, editCancelButton});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Worklet Planner");
@@ -296,7 +409,11 @@ public class PlannerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        newTitleField.setText("");
+        newDescField.setText("");
+        newDDField.setText("");
+        newColorChooser.setColor(new Color(255,255,255));
         newEventFrame.setVisible(true);
     }
     
@@ -304,7 +421,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         dashPane.setLayout(null);
         addEventButton = new JButton("Add Event");
         addEventButton.addActionListener(PlannerFrame.this::addEventButtonActionPerformed);
-        addEventButton.setBounds(650, 10, 100, 40);
+        addEventButton.setBounds(675, 10, 100, 40);
         dashPane.add(addEventButton);
         
         LocalDateTime myDateObj = LocalDateTime.now();
@@ -323,12 +440,13 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         String line = "";
         Color color = newColorChooser.getColor();
-        line += newTitleField.getText()+";"+newDescField.getText()+";"+newDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
+        line = newTitleField.getText()+";"+newDescField.getText()+";"+newDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
         System.out.println(line);
         newEvents.add(line);
         dashPane.removeAll();
         addDefaultC();
         displayEvents();
+        newEventFrame.dispose();
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
@@ -358,25 +476,51 @@ public class PlannerFrame extends javax.swing.JFrame {
         dispose();
         LoginSystem.main(new String[0]);
     }//GEN-LAST:event_logNoButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        Color color = editColorChooser.getColor();
+        String line = editTitleField.getText()+";"+editDescField.getText()+";"+editDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
+        newEvents.set(tmpIndex, line);
+        dashPane.removeAll();
+        addDefaultC();
+        displayEvents();
+        editEventFrame.dispose();
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void editCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCancelButtonActionPerformed
+        editEventFrame.dispose();
+    }//GEN-LAST:event_editCancelButtonActionPerformed
   
     private void delBButtonActionPerformed(ActionEvent evt, JButton delB) {
         System.out.println("deleting...");
         System.out.println(eventPanels.size()+" "+eventPanels);
         for (int i=0;i<eventPanels.size();i++) {
-            System.out.println(eventPanels.get(i).isAncestorOf(delB));
             if (eventPanels.get(i).isAncestorOf(delB)) {
                 newEvents.remove(i);
                 dashPane.removeAll();
                 addDefaultC();
                 displayEvents();
-                System.out.println("yes");
+                break;
             }
         }
         System.out.println("done deleting");
     }
     
-    private void editBButtonActionPerformed(java.awt.event.ActionEvent evt, javax.swing.JButton b) {
+    private void editBButtonActionPerformed(java.awt.event.ActionEvent evt, javax.swing.JButton editB) {
         System.out.println("editing...");
+        for (int i=0;i<eventPanels.size();i++) {
+            if (eventPanels.get(i).isAncestorOf(editB)) {
+                System.out.println(newEvents.get(i));
+                String[] line = newEvents.get(i).split(";");
+                editTitleField.setText(line[0]);
+                editDescField.setText(line[1]);
+                editDDField.setText(line[2]);
+                editColorChooser.setColor(new Color(Integer.parseInt(line[3]),Integer.parseInt(line[4]),Integer.parseInt(line[5])));
+                tmpIndex = i;
+                break;
+            }
+        }
+        editEventFrame.setVisible(true);
     }
     
     private void readFile() {
@@ -405,6 +549,8 @@ public class PlannerFrame extends javax.swing.JFrame {
             String[] words = line.split(";");
             JPanel panel = new JPanel(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
+            //LineBorder border = new LineBorder(new Color(192,192,192), 3, true);
+            //panel.setBorder(border);
             panel.setBackground(new Color(192,192,192));
             
             c.weighty = 1.0;
@@ -436,13 +582,13 @@ public class PlannerFrame extends javax.swing.JFrame {
             panel.add(delB, c);
             
             dashPane.setLayout(null);
-            panel.setBounds(18, y, 600, 60);
+            panel.setBounds(28, y, 600, 60);
             dashPane.add(panel);
             
             JPanel panel2 = new JPanel();
-            panel2.setBounds(0, y, 15, 60);
-            LineBorder border = new LineBorder(new Color(Integer.parseInt(words[3]),Integer.parseInt(words[4]),Integer.parseInt(words[5])), 20, true);
-            panel2.setBorder(border);
+            panel2.setBounds(10, y, 15, 60);
+            LineBorder border2 = new LineBorder(new Color(Integer.parseInt(words[3]),Integer.parseInt(words[4]),Integer.parseInt(words[5])), 20, true);
+            panel2.setBorder(border2);
             dashPane.add(panel2);
             
             eventPanels.add(panel);
@@ -491,6 +637,17 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel calendarPane;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel dashPane;
+    private javax.swing.JButton editButton;
+    private javax.swing.JButton editCancelButton;
+    private javax.swing.JColorChooser editColorChooser;
+    private javax.swing.JLabel editColorLabel;
+    private javax.swing.JTextField editDDField;
+    private javax.swing.JLabel editDDLabel;
+    private javax.swing.JTextField editDescField;
+    private javax.swing.JLabel editDescLabel;
+    private javax.swing.JFrame editEventFrame;
+    private javax.swing.JTextField editTitleField;
+    private javax.swing.JLabel editTitleLabel;
     private javax.swing.JButton logCancelButton;
     private javax.swing.JButton logNoButton;
     private javax.swing.JButton logYesButton;

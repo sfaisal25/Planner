@@ -63,7 +63,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         pnlCalendar.setBorder(BorderFactory.createTitledBorder("Calendar"));
         calendarPane.setLayout (null);
         calendarPane.add(lblMonth, BorderLayout.PAGE_START);
-          setResizable(false);
+        setResizable(false);
 
         btnPrev.addActionListener(new btnPrev_Action());
         btnNext.addActionListener(new btnNext_Action());
@@ -76,7 +76,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane.add(btnPrev);
         calendarPane.add(btnNext);
         calendarPane.add(stblCalendar);
-         calendarPane.setBackground(new Color(255, 229, 153));
+        calendarPane.setBackground(new Color(255, 229, 153));
 
         calendarPane.setBounds(0, 0, calendarPane.getWidth(), calendarPane.getHeight());
         lblMonth.setBounds(160-lblMonth.getPreferredSize().width/2, 25, 100, 25);
@@ -87,7 +87,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         stblCalendar.setBounds(0, 50, calendarPane.getWidth(), calendarPane.getHeight());
 
 
-         GregorianCalendar cal = new GregorianCalendar(); //Create calendar
+        GregorianCalendar cal = new GregorianCalendar(); //Create calendar
         calDay = cal.get(GregorianCalendar.DAY_OF_MONTH); //Get day
         calMonth = cal.get(GregorianCalendar.MONTH); //Get month
         calYear = cal.get(GregorianCalendar.YEAR); //Get year
@@ -99,8 +99,8 @@ public class PlannerFrame extends javax.swing.JFrame {
             mtblCalendar.addColumn(headers[i]);
         }
         
-                tblCalendar.setBackground(new Color(255, 229, 153));
-                setBackground(new Color(255, 229, 153));
+        tblCalendar.setBackground(new Color(255, 229, 153));
+        setBackground(new Color(255, 229, 153));
 
         
         //No resize/reorder
@@ -127,6 +127,22 @@ public class PlannerFrame extends javax.swing.JFrame {
         newColorChooser.removeChooserPanel(oldPanels[1]);
         newColorChooser.removeChooserPanel(oldPanels[2]);
         newColorChooser.removeChooserPanel(oldPanels[4]);
+        
+        newMonth.removeAllItems();
+        newDay.removeAllItems();
+        newYear.removeAllItems();
+        for (int i=1;i<=12;i++) {
+            newMonth.addItem(String.valueOf(i));
+        }
+        
+        for (int i=1;i<=31;i++) {
+            newDay.addItem(String.valueOf(i));
+        }
+        
+        for (int i=calYear;i<=calYear+1;i++) {
+            newYear.addItem(String.valueOf(i));
+        }
+        
         newEventFrame.pack();
         
         editColorChooser.setPreviewPanel(new JPanel());
@@ -136,7 +152,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         editColorChooser.removeChooserPanel(oldPanels2[4]);
         editEventFrame.pack();
         
-        refreshCalendar (calMonth, calYear);
+        refreshCalendar(calMonth, calYear);
     }
 
     @SuppressWarnings("unchecked")
@@ -149,11 +165,16 @@ public class PlannerFrame extends javax.swing.JFrame {
         newDescLabel = new javax.swing.JLabel();
         newDescField = new javax.swing.JTextField();
         newDDLabel = new javax.swing.JLabel();
-        newDDField = new javax.swing.JTextField();
         newColorChooser = new javax.swing.JColorChooser();
         newColorLabel = new javax.swing.JLabel();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        newMonth = new javax.swing.JComboBox<>();
+        newDay = new javax.swing.JComboBox<>();
+        newYear = new javax.swing.JComboBox<>();
+        newDDLabel1 = new javax.swing.JLabel();
+        newDDLabel2 = new javax.swing.JLabel();
+        newDDLabel3 = new javax.swing.JLabel();
         logoutFrame = new javax.swing.JFrame();
         logoutLabel = new javax.swing.JLabel();
         logYesButton = new javax.swing.JButton();
@@ -201,6 +222,23 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         });
 
+        newMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        newMonth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newMonthActionPerformed(evt);
+            }
+        });
+
+        newDay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        newYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        newDDLabel1.setText("Month");
+
+        newDDLabel2.setText("Day");
+
+        newDDLabel3.setText("Year");
+
         javax.swing.GroupLayout newEventFrameLayout = new javax.swing.GroupLayout(newEventFrame.getContentPane());
         newEventFrame.getContentPane().setLayout(newEventFrameLayout);
         newEventFrameLayout.setHorizontalGroup(
@@ -219,12 +257,23 @@ public class PlannerFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(newDescField))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
-                                .addComponent(newColorLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
-                                .addComponent(newDDLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(newDDField))))
+                                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(newColorLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, newEventFrameLayout.createSequentialGroup()
+                                        .addComponent(newDDLabel)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(newDDLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(newMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(newDDLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(newDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(newDDLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(newYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(newEventFrameLayout.createSequentialGroup()
                         .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(newEventFrameLayout.createSequentialGroup()
@@ -238,6 +287,9 @@ public class PlannerFrame extends javax.swing.JFrame {
                         .addGap(0, 25, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        newEventFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {newDDLabel1, newDDLabel2, newDDLabel3});
+
         newEventFrameLayout.setVerticalGroup(
             newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newEventFrameLayout.createSequentialGroup()
@@ -249,13 +301,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newDescLabel)
                     .addComponent(newDescField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(newEventFrameLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(newDDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newEventFrameLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(newDDLabel)))
+                .addGap(18, 18, 18)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newDDLabel2)
+                    .addComponent(newDDLabel1)
+                    .addComponent(newDDLabel3)
+                    .addComponent(newDDLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -623,7 +677,6 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void addEventButtonActionPerformed(java.awt.event.ActionEvent evt) {
         newTitleField.setText("");
         newDescField.setText("");
-        newDDField.setText("");
         newColorChooser.setColor(new Color(255,255,255));
         newEventFrame.setVisible(true);
     }
@@ -651,7 +704,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         String line = "";
         Color color = newColorChooser.getColor();
-        line = newTitleField.getText()+";"+newDescField.getText()+";"+newDDField.getText()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
+        line = newTitleField.getText()+";"+newDescField.getText()+";"+newMonth.getSelectedItem()+"/"+newDay.getSelectedItem()+"/"+newYear.getSelectedItem()+";"+color.getRed()+";"+color.getGreen()+";"+color.getBlue();
         System.out.println(line);
         newEvents.add(line);
         dashPane.removeAll();
@@ -701,6 +754,20 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void editCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCancelButtonActionPerformed
         editEventFrame.dispose();
     }//GEN-LAST:event_editCancelButtonActionPerformed
+
+    private void newMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMonthActionPerformed
+        if (newMonth.getSelectedItem() == "4" && newMonth.getSelectedItem() == "6" && newMonth.getSelectedItem() == "9" && newMonth.getSelectedItem() == "11") {
+            newMonth.removeAllItems();
+            for (int i=1;i<=30;i++) {
+                newDay.addItem(String.valueOf(i));
+            }
+        } else if (newMonth.getSelectedItem() == "2") {
+            newMonth.removeAllItems();
+            for (int i=1;i<=28;i++) {
+                newDay.addItem(String.valueOf(i));
+            }
+        }
+    }//GEN-LAST:event_newMonthActionPerformed
   
     private void delBButtonActionPerformed(ActionEvent evt, JButton delB) {
         System.out.println("deleting...");
@@ -867,13 +934,18 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JLabel logoutLabel;
     private javax.swing.JColorChooser newColorChooser;
     private javax.swing.JLabel newColorLabel;
-    private javax.swing.JTextField newDDField;
     private javax.swing.JLabel newDDLabel;
+    private javax.swing.JLabel newDDLabel1;
+    private javax.swing.JLabel newDDLabel2;
+    private javax.swing.JLabel newDDLabel3;
+    private javax.swing.JComboBox<String> newDay;
     private javax.swing.JTextField newDescField;
     private javax.swing.JLabel newDescLabel;
     private javax.swing.JFrame newEventFrame;
+    private javax.swing.JComboBox<String> newMonth;
     private javax.swing.JTextField newTitleField;
     private javax.swing.JLabel newTitleLabel;
+    private javax.swing.JComboBox<String> newYear;
     private javax.swing.JPanel notesPane;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables

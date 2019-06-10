@@ -759,12 +759,12 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void newMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMonthActionPerformed
         System.out.println(newMonth.getSelectedItem());
         if ((String)newMonth.getSelectedItem() == newMonth.getItemAt(3) || (String)newMonth.getSelectedItem() == newMonth.getItemAt(5) || (String)newMonth.getSelectedItem() == newMonth.getItemAt(8) || newMonth.getSelectedItem() == newMonth.getItemAt(10)) {
-            newMonth.removeAllItems();
+            newDay.removeAllItems();
             for (int i=1;i<=30;i++) {
                 newDay.addItem(String.valueOf(i));
             }
         } else if (newMonth.getSelectedItem() == newMonth.getItemAt(1)) {
-            newMonth.removeAllItems();
+            newDay.removeAllItems();
             for (int i=1;i<=28;i++) {
                 newDay.addItem(String.valueOf(i));
             }

@@ -302,14 +302,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                     .addComponent(newDescLabel)
                     .addComponent(newDescField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(newDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(newYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newDDLabel2)
-                    .addComponent(newDDLabel1)
-                    .addComponent(newDDLabel3)
-                    .addComponent(newDDLabel))
+                    .addGroup(newEventFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(newDDLabel2)
+                        .addComponent(newDDLabel1)
+                        .addComponent(newDDLabel3)
+                        .addComponent(newDDLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -722,7 +723,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         logoutFrame.dispose();
         System.out.println("logging out...");
         try {
-            Files.write(Paths.get(user+".txt"), newEvents, StandardCharsets.UTF_8);
+            Files.write(Paths.get(user+"_events"+".txt"), newEvents, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -805,8 +806,8 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void readFile() {
         Scanner in = null;
         try {
-            File file = new File(user+".txt");
-            Path path = Paths.get(user+".txt");
+            File file = new File(user+"_events"+".txt");
+            Path path = Paths.get(user+"_events"+".txt");
             oldEvents = Files.readAllLines(path, StandardCharsets.UTF_8);
             newEvents = new ArrayList<>(oldEvents);
             in = new Scanner(file);
@@ -877,6 +878,13 @@ public class PlannerFrame extends javax.swing.JFrame {
             repaint();
             revalidate();
         }
+    }
+    
+    public class Notes {
+        Notes() {
+            
+        }
+      
     }
     
     public static void main(String args[]) {

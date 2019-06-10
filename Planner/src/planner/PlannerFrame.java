@@ -756,12 +756,13 @@ public class PlannerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_editCancelButtonActionPerformed
 
     private void newMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMonthActionPerformed
-        if (newMonth.getSelectedItem() == "4" && newMonth.getSelectedItem() == "6" && newMonth.getSelectedItem() == "9" && newMonth.getSelectedItem() == "11") {
+        System.out.println(newMonth.getSelectedItem());
+        if ((String)newMonth.getSelectedItem() == newMonth.getItemAt(3) || (String)newMonth.getSelectedItem() == newMonth.getItemAt(5) || (String)newMonth.getSelectedItem() == newMonth.getItemAt(8) || newMonth.getSelectedItem() == newMonth.getItemAt(10)) {
             newMonth.removeAllItems();
             for (int i=1;i<=30;i++) {
                 newDay.addItem(String.valueOf(i));
             }
-        } else if (newMonth.getSelectedItem() == "2") {
+        } else if (newMonth.getSelectedItem() == newMonth.getItemAt(1)) {
             newMonth.removeAllItems();
             for (int i=1;i<=28;i++) {
                 newDay.addItem(String.valueOf(i));

@@ -26,8 +26,11 @@ import javax.swing.JTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.GregorianCalendar;
@@ -38,8 +41,10 @@ import javax.swing.table.DefaultTableModel;
 public class PlannerFrame extends javax.swing.JFrame {
     public List<String> oldEvents;
     public List<String> newEvents;
+    List<String> newNotes = new ArrayList<>();
     public List<JPanel> eventPanels = new ArrayList<>();
-    public String user = LoginSystem.user;
+    public List<String> notesToDel = new ArrayList<>();
+    public static String user = LoginSystem.user;
     public int tmpIndex;
     private int calYear, calMonth, calDay, currentYear, currentMonth;
     
@@ -724,6 +729,21 @@ public class PlannerFrame extends javax.swing.JFrame {
         System.out.println("logging out...");
         try {
             Files.write(Paths.get(user+"_events"+".txt"), newEvents, StandardCharsets.UTF_8);
+            Files.write(Paths.get(user+"_notes"+".txt"), newNotes, StandardCharsets.UTF_8);
+            for (String fileName : notesToDel) {
+                
+                Path path = Paths.get(fileName+".txt");
+                try {
+                    Files.delete(path);
+                } catch (NoSuchFileException x) {
+                    System.err.format("%s: no such" + " file or directory%n", path);
+                } catch (DirectoryNotEmptyException x) {
+                    System.err.format("%s not empty%n", path);
+                } catch (IOException x) {
+                    System.err.println(x);
+                }
+                
+            }
         } catch (IOException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -829,8 +849,6 @@ public class PlannerFrame extends javax.swing.JFrame {
             String[] words = line.split(";");
             JPanel panel = new JPanel(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
-            //LineBorder border = new LineBorder(new Color(192,192,192), 3, true);
-            //panel.setBorder(border);
             panel.setBackground(new Color(192,192,192));
             
             c.weighty = 1.0;
@@ -881,13 +899,142 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     
     public class Notes {
-        Notes() {
-            
+        File file;
+        public List<JPanel> notePanels = new ArrayList<>();
+        
+        Notes() throws IOException {
+            file = new File(user+"_notes"+".txt");
+            addDefaultN();
         }
-      
+        
+        private void addNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {
+            System.out.println("adding note...");
+        }
+        
+        private void addDefaultN() {
+            notesPane.setLayout(null);
+            addNoteButton = new JButton("Add Note");
+            addNoteButton.addActionListener(Notes.this::addNoteButtonActionPerformed);
+            addNoteButton.setBounds(675, 10, 100, 40);
+            notesPane.add(addNoteButton);
+
+            LocalDateTime myDateObj = LocalDateTime.now();
+            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E. MMM dd, yyyy");
+            String formattedDate = myDateObj.format(myFormatObj);
+            dateLabel = new JLabel(formattedDate);
+            dateLabel.setBounds(10, 10, 130, 20);
+            notesPane.setLayout(null);
+            notesPane.add(dateLabel);
+        }
+        
+        private void readNotes() {
+            Scanner in = null;
+            try {
+                File file = new File(user+"_notes"+".txt");
+                Path path = Paths.get(user+"_notes"+".txt");
+                newNotes = Files.readAllLines(path, StandardCharsets.UTF_8);
+                in = new Scanner(file);
+            } catch (IOException ex) {
+                Logger.getLogger(LoginSystem.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        private void editBNButtonActionPerformed(ActionEvent evt, JButton editB) throws IOException {
+            System.out.println("editing notes...");
+            for (int i=0;i<notePanels.size();i++) {
+                if (notePanels.get(i).isAncestorOf(editB)) {
+                    System.out.println(newNotes.get(i));
+                    String name = newNotes.get(i);
+                    File noteFile = new File(name+".txt");
+                    Desktop.getDesktop().edit(noteFile);
+                    tmpIndex = i;
+                    break;
+                }
+            }
+        }
+
+        private void delBNButtonActionPerformed(ActionEvent evt, JButton delB) {
+            System.out.println("deleting notes...");
+            System.out.println(notePanels.size()+" "+notePanels);
+            for (int i=0;i<notePanels.size();i++) {
+                if (notePanels.get(i).isAncestorOf(delB)) {
+                    newNotes.remove(i);
+                    notesPane.removeAll();
+                    notesToDel.add(newNotes.get(i));
+                    addDefaultN();
+                    displayNotes();
+                    break;
+                }
+            }
+            System.out.println("done deleting");
+        }
+        
+        private void displayNotes() {
+            notesPane.repaint();
+            notesPane.revalidate();
+            repaint();
+            revalidate();
+            notePanels.clear();
+            System.out.println(newNotes);
+            int y = 40;
+            for (String line : newNotes) {
+                System.out.println("displaying note...");
+                JPanel panel = new JPanel(new GridBagLayout());
+                GridBagConstraints c = new GridBagConstraints();
+                panel.setBackground(new Color(192,192,192));
+
+                c.weighty = 1.0;
+                c.weightx = 1.0;
+                c.anchor = GridBagConstraints.LINE_START;
+                c.gridx = 0;
+                c.gridy = 0;
+                panel.add(new JLabel(" "+line), c);
+                c.gridheight = 1;
+                c.gridx = 2;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.LINE_END;
+                JButton editB = new JButton("Edit");
+                editB.addActionListener((ActionEvent evt) -> {
+                    try {
+                        Notes.this.editBNButtonActionPerformed(evt, editB);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                panel.add(editB, c);
+                c.gridy = 4;
+                JButton delB = new JButton("Delete");
+                delB.addActionListener((ActionEvent evt) -> {
+                    Notes.this.delBNButtonActionPerformed(evt, delB);
+                });
+                panel.add(delB, c);
+
+                notesPane.setLayout(null);
+                panel.setBounds(10, y, 600, 60);
+                notesPane.add(panel);
+
+                notePanels.add(panel);
+                y += panel.getHeight()+10;
+                notesPane.repaint();
+                notesPane.revalidate();
+                repaint();
+                revalidate();
+            }
+        }
     }
     
-    public static void main(String args[]) {
+    private void showNotes() {
+        Notes notes;
+        try {
+            notes = new Notes();
+            notes.readNotes();
+            notes.displayNotes();
+        } catch (IOException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void main(String args[]) throws IOException {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -910,10 +1057,12 @@ public class PlannerFrame extends javax.swing.JFrame {
         }
         //</editor-fold>
         PlannerFrame frame = new PlannerFrame();
+        Notes notes = new Notes();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 frame.readFile();
                 frame.displayEvents();
+                frame.showNotes();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -958,6 +1107,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel notesPane;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
+    private JButton addNoteButton;
     private JLabel dateLabel;
     private JButton addEventButton;
     private JLabel lblMonth, lblYear, labelText;

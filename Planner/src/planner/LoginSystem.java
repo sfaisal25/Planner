@@ -218,9 +218,10 @@ public class LoginSystem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void welcomeUser() {
+    private void welcomeUser() throws IOException {
         user = userField.getText();
-        PlannerFrame.main(new String[0]);
+        PlannerFrame frame = new PlannerFrame();
+        frame.main(new String[0]);
         this.setVisible(false);
         this.dispose();
         success = true;

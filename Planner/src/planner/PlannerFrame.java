@@ -615,18 +615,42 @@ public class PlannerFrame extends javax.swing.JFrame {
     
     class tblCalendarRenderer extends DefaultTableCellRenderer{
         public Component getTableCellRendererComponent (JTable table, Object value, boolean selected, boolean focused, int row, int column){
-            super.getTableCellRendererComponent(table, value, selected, focused, row, column);
-            if (column == 0 || column == 6){ //Week-end
-                setBackground(new Color(255, 220, 220));
+            int[] datesInt= new int [3];
+            List<String> totalVal = new ArrayList<String>();
+            List<String> eveName = new ArrayList<String>();
+            int f;
+            int r=0;
+            List<Integer> arrayTimes = new ArrayList<Integer>();
+            for (String line : newEvents) {
+                String[] words = line.split(";");
+                totalVal.add(words[2]);
+                eveName.add(words[0]);
             }
-            else{ //Week
-                setBackground(new Color(255, 229, 153));
-            }
-            if (value != null){
-                if (Integer.parseInt(value.toString()) == calDay && currentMonth == calMonth && currentYear == calYear){ //Today
-                    setBackground(new Color(220, 220, 255));
+            f=totalVal.size()*2;
+                super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+                if (column == 0 || column == 6){ //Week-end
+                    setBackground(new Color(255, 220, 220));
+                }              
+
+                else{ //Week
+                    setBackground(new Color(255, 229, 153));
                 }
-            }
+                if (value != null){
+                    if (Integer.parseInt(value.toString()) == calDay && currentMonth == calMonth && currentYear == calYear){ //Today
+                        setBackground(new Color(220, 220, 255));
+                    }
+                    while (totalVal.size()<f){
+                        String[] splitDates= totalVal.get(r).split("/");
+                        for (int i=0; i<3; i++){
+                            datesInt[i]= Integer.parseInt(splitDates[i]);
+                        }
+                        if (Integer.parseInt(value.toString()) == datesInt[1] && currentMonth == (datesInt[0]-1) && currentYear == datesInt[2]){ //Today
+                            setText(Integer.parseInt(value.toString())+" "+eveName.get(r));
+                        }
+                        f--;
+                        r++;
+                    }
+                }
             refreshCalendar(currentMonth, currentYear);    
             setBorder(null);
             setForeground(Color.black);

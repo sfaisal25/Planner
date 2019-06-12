@@ -29,6 +29,9 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
@@ -39,6 +42,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PlannerFrame extends javax.swing.JFrame {
+    Notes note;
     public List<String> oldEvents;
     public List<String> newEvents;
     List<String> newNotes = new ArrayList<>();
@@ -196,6 +200,11 @@ public class PlannerFrame extends javax.swing.JFrame {
         editColorLabel = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
         editCancelButton = new javax.swing.JButton();
+        newNoteFrame = new javax.swing.JFrame();
+        noteNameLabel = new javax.swing.JLabel();
+        noteNameField = new javax.swing.JTextField();
+        noteCreateButton = new javax.swing.JButton();
+        noteCancelButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         dashPane = new javax.swing.JPanel();
         calendarPane = new javax.swing.JPanel();
@@ -486,6 +495,62 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         editEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {editButton, editCancelButton});
 
+        newNoteFrame.setMinimumSize(new java.awt.Dimension(280, 120));
+        newNoteFrame.setPreferredSize(new java.awt.Dimension(280, 120));
+        newNoteFrame.setResizable(false);
+
+        noteNameLabel.setText("Note Name:");
+
+        noteCreateButton.setText("Create");
+        noteCreateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noteCreateButtonActionPerformed(evt);
+            }
+        });
+
+        noteCancelButton.setText("Cancel");
+        noteCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noteCancelButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout newNoteFrameLayout = new javax.swing.GroupLayout(newNoteFrame.getContentPane());
+        newNoteFrame.getContentPane().setLayout(newNoteFrameLayout);
+        newNoteFrameLayout.setHorizontalGroup(
+            newNoteFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(newNoteFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(noteNameLabel)
+                .addGap(18, 18, 18)
+                .addComponent(noteNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(newNoteFrameLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(noteCreateButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(noteCancelButton)
+                .addGap(28, 28, 28))
+        );
+
+        newNoteFrameLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {noteCancelButton, noteCreateButton});
+
+        newNoteFrameLayout.setVerticalGroup(
+            newNoteFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(newNoteFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(newNoteFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(noteNameLabel)
+                    .addComponent(noteNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(newNoteFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(noteCreateButton)
+                    .addComponent(noteCancelButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        newNoteFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {noteCancelButton, noteCreateButton});
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Worklet Planner");
 
@@ -755,7 +820,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             Files.write(Paths.get(user+"_events"+".txt"), newEvents, StandardCharsets.UTF_8);
             Files.write(Paths.get(user+"_notes"+".txt"), newNotes, StandardCharsets.UTF_8);
             for (String fileName : notesToDel) {
-                
+                System.out.println("DELETING: "+fileName);
                 Path path = Paths.get(fileName+".txt");
                 try {
                     Files.delete(path);
@@ -814,6 +879,30 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_newMonthActionPerformed
+
+    private void noteCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noteCancelButtonActionPerformed
+        newNoteFrame.dispose();
+    }//GEN-LAST:event_noteCancelButtonActionPerformed
+
+    private void noteCreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noteCreateButtonActionPerformed
+        PrintWriter file;
+        try {
+            file = new PrintWriter(noteNameField.getText()+".txt", "UTF-8");
+            file.close();
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        newNotes.add(noteNameField.getText());
+        try {
+            Files.write(Paths.get(user+"_notes"+".txt"), newNotes, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        notesPane.removeAll();
+        note.addDefaultN();
+        note.displayNotes();
+        newNoteFrame.dispose();
+    }//GEN-LAST:event_noteCreateButtonActionPerformed
   
     private void delBButtonActionPerformed(ActionEvent evt, JButton delB) {
         System.out.println("deleting...");
@@ -932,7 +1021,8 @@ public class PlannerFrame extends javax.swing.JFrame {
         }
         
         private void addNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {
-            System.out.println("adding note...");
+            newNoteFrame.setLocationRelativeTo(null);
+            newNoteFrame.setVisible(true);
         }
         
         private void addDefaultN() {
@@ -982,9 +1072,9 @@ public class PlannerFrame extends javax.swing.JFrame {
             System.out.println(notePanels.size()+" "+notePanels);
             for (int i=0;i<notePanels.size();i++) {
                 if (notePanels.get(i).isAncestorOf(delB)) {
+                    notesToDel.add(newNotes.get(i));
                     newNotes.remove(i);
                     notesPane.removeAll();
-                    notesToDel.add(newNotes.get(i));
                     addDefaultN();
                     displayNotes();
                     break;
@@ -1048,11 +1138,11 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     
     private void showNotes() {
-        Notes notes;
         try {
-            notes = new Notes();
-            notes.readNotes();
-            notes.displayNotes();
+            notesPane.removeAll();
+            note = new Notes();
+            note.readNotes();
+            note.displayNotes();
         } catch (IOException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1125,9 +1215,14 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JLabel newDescLabel;
     private javax.swing.JFrame newEventFrame;
     private javax.swing.JComboBox<String> newMonth;
+    private javax.swing.JFrame newNoteFrame;
     private javax.swing.JTextField newTitleField;
     private javax.swing.JLabel newTitleLabel;
     private javax.swing.JComboBox<String> newYear;
+    private javax.swing.JButton noteCancelButton;
+    private javax.swing.JButton noteCreateButton;
+    private javax.swing.JTextField noteNameField;
+    private javax.swing.JLabel noteNameLabel;
     private javax.swing.JPanel notesPane;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables

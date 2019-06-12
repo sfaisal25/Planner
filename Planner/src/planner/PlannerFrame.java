@@ -56,6 +56,10 @@ public class PlannerFrame extends javax.swing.JFrame {
         initComponents();
         addDefaultC();
         
+        ImageIcon image = new ImageIcon("Worklet.png");
+        logoLabel.setIcon(image);
+        logoLabel.setText("");
+        
         lblMonth = new JLabel ("January");
         labelText =new JLabel ("ERROR");
         lblYear = new JLabel ("Change year:");
@@ -210,6 +214,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane = new javax.swing.JPanel();
         notesPane = new javax.swing.JPanel();
         logoutButton = new javax.swing.JButton();
+        logoLabel = new javax.swing.JLabel();
 
         newEventFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         newEventFrame.setMinimumSize(new java.awt.Dimension(660, 550));
@@ -496,7 +501,6 @@ public class PlannerFrame extends javax.swing.JFrame {
         editEventFrameLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {editButton, editCancelButton});
 
         newNoteFrame.setMinimumSize(new java.awt.Dimension(280, 120));
-        newNoteFrame.setPreferredSize(new java.awt.Dimension(280, 120));
         newNoteFrame.setResizable(false);
 
         noteNameLabel.setText("Note Name:");
@@ -573,7 +577,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         calendarPane.setLayout(calendarPaneLayout);
         calendarPaneLayout.setHorizontalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
         calendarPaneLayout.setVerticalGroup(
             calendarPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -586,7 +590,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         notesPane.setLayout(notesPaneLayout);
         notesPaneLayout.setHorizontalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
         notesPaneLayout.setVerticalGroup(
             notesPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,6 +606,8 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         });
 
+        logoLabel.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -612,12 +618,18 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(logoLabel)
+                .addGap(220, 220, 220)
                 .addComponent(logoutButton))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(logoutButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(logoutButton)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(logoLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
@@ -1201,6 +1213,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JButton logCancelButton;
     private javax.swing.JButton logNoButton;
     private javax.swing.JButton logYesButton;
+    private javax.swing.JLabel logoLabel;
     private javax.swing.JButton logoutButton;
     private javax.swing.JFrame logoutFrame;
     private javax.swing.JLabel logoutLabel;

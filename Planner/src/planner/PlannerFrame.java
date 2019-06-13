@@ -1020,6 +1020,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             dashPane.revalidate();
             repaint();
             revalidate();
+            validate();
         }
     }
     

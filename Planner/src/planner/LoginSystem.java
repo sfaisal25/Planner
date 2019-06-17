@@ -218,9 +218,10 @@ public class LoginSystem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void welcomeUser() {
+    private void welcomeUser() throws IOException {
         user = userField.getText();
-        PlannerFrame.main(new String[0]);
+        PlannerFrame frame = new PlannerFrame();
+        frame.main(new String[0]);
         this.setVisible(false);
         this.dispose();
         success = true;
@@ -380,8 +381,10 @@ public class LoginSystem extends javax.swing.JFrame {
                 outputLabel.setForeground(new java.awt.Color(255, 0, 0));
                 outputLabel.setText("Minimum password length: 8 characters");
             } else {
-                PrintWriter file = new PrintWriter(userField.getText()+".txt", "UTF-8");
-                file.close();
+                PrintWriter file1 = new PrintWriter(userField.getText()+"_events"+".txt", "UTF-8");
+                PrintWriter file2 = new PrintWriter(userField.getText()+"_notes"+".txt", "UTF-8");
+                file1.close();
+                file2.close();
                 outputLabel.setForeground(new java.awt.Color(34, 139, 34));
                 outputLabel.setText("Registered.");
             }
